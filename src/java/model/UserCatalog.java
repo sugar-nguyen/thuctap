@@ -24,10 +24,32 @@ public class UserCatalog {
                 ses.close();
                 return list;
             }
+            ses.getTransaction().commit();
+            ses.close();
             return list;
         } catch (Exception e) {
             return null;
+        } finally {
+            HibernateUtil.close();
         }
 
+    }
+
+    public Boolean login(String username) {
+        try {
+            Session ses = HibernateUtil.open();
+            ses.beginTransaction();
+            User login_user = (User) ses.createQuery("from User where username = :username");
+            if (login_user != null) {
+                ses.getTransaction().commit();
+                ses.close();
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }finally{
+            HibernateUtil.close();
+        }
     }
 }

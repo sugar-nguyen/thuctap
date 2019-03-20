@@ -7,21 +7,29 @@ package webservice;
 
 import entities.User;
 import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import model.*;
 
-
 @Path("usercatalog")
 public class UserCatalogResource {
-    
+
     @GET
     @Path("getlistuser")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getListUser(){
+    public List<User> getListUser() {
         UserCatalog ctl = new UserCatalog();
         return ctl.getListUser();
+    }
+
+    @GET
+    @Path("userlogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Boolean login(@QueryParam("username") String username) {
+        if (username != null) {
+            UserCatalog ctl = new UserCatalog();
+            return ctl.login(username);
+        }
+        return false;
     }
 }
