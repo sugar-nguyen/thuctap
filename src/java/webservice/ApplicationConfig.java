@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(webservice.DevicesCatalogResource.class);
         resources.add(webservice.GenericResource.class);
         resources.add(webservice.ProductCatalogResource.class);
+        resources.add(webservice.UserCatalogResource.class);
     }
     
 }

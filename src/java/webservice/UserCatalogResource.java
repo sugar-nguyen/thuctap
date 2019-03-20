@@ -5,23 +5,23 @@
  */
 package webservice;
 
-import entities.Devices;
+import entities.User;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import model.UserCatalog;
+import model.*;
 
-@Path("devicescatalog")
-public class DevicesCatalogResource {
 
-//    @GET
-//    @Path("getdsdevices")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Devices> getdsDV() {
-//        UserCatalog ctl = new UserCatalog();
-//        return ctl.getList();
-//    }
-   
+@Path("usercatalog")
+public class UserCatalogResource {
+    
+    @GET
+    @Path("getlistuser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getListUser(){
+        UserCatalog ctl = new UserCatalog();
+        return ctl.getListUser();
+    }
 }

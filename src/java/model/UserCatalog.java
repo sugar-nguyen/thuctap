@@ -1,6 +1,6 @@
 package model;
 
-import entities.Devices;
+import entities.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,22 +12,22 @@ import org.hibernate.Session;
 
 public class UserCatalog {
 
-    List<Devices> ds = new ArrayList<>();
+    List<User> list = new ArrayList<>();
 
-    public List<Devices> getList() throws ParseException {
-//        Session ses = HibernateUtil.open();
-//        ses.beginTransaction();
-//        List<Devices> dsdv = ses.createQuery("from devices").list();
-        SimpleDateFormat dfm = new SimpleDateFormat("dd/MM/yyyy");
+    public List<User> getListUser() {
+        try {
+            Session ses = HibernateUtil.open();
+            ses.beginTransaction();
+            list = ses.createCriteria(User.class).list();
+            if (!list.isEmpty()) {
+                ses.getTransaction().commit();
+                ses.close();
+                return list;
+            }
+            return list;
+        } catch (Exception e) {
+            return null;
+        }
 
-        Devices dv1 = new Devices("123", dfm.parse("14/12/2019"), Byte.MAX_VALUE);
-        Devices dv2 = new Devices("123", dfm.parse("14/12/2019"), Byte.MAX_VALUE);
-        Devices dv3 = new Devices("123", dfm.parse("14/12/2019"), Byte.MAX_VALUE);
-        Devices dv4 = new Devices("123", dfm.parse("14/12/2019"), Byte.MAX_VALUE);
-        ds.add(dv1);
-        ds.add(dv2);
-        ds.add(dv3);
-        ds.add(dv4);
-        return ds;
     }
 }
