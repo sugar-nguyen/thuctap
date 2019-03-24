@@ -6,6 +6,7 @@
 package webservice;
 
 import entities.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,11 +25,12 @@ public class UserCatalogResource {
 
     @GET
     @Path("userlogin")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Boolean login(@QueryParam("username") String username) {
-        if (username != null) {
+    //  @Produces(MediaType.APPLICATION_JSON)
+    public Boolean login(@QueryParam("username") String username, @QueryParam("password") String password) {
+
+        if (username != null && password != null) {
             UserCatalog ctl = new UserCatalog();
-            return ctl.login(username);
+            return ctl.login(username, password);
         }
         return false;
     }
