@@ -34,4 +34,14 @@ public class UserCatalogResource {
         }
         return false;
     }
+    
+    @GET
+    @Path("userregister")
+    public Boolean register(@QueryParam("username") String username, @QueryParam("password") String password, @QueryParam("email") String email){
+        if(username != null && password != null && email != null){
+            UserCatalog ctl = new UserCatalog();
+            return  ctl.register(username, password, email);
+        }
+        return false;
+    }
 }

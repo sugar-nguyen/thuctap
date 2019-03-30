@@ -4,7 +4,6 @@ import entities.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,16 +12,17 @@ import dao.DbHelper;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserCatalog {
 
     public List<User> getListUser() {
+        List<User> list = new ArrayList<>();
         try {
-            List<User> list = new ArrayList<>();
-            String sql = "select * from user";
-            PreparedStatement prepare = (PreparedStatement) DbHelper.getConnection().prepareStatement(sql);
+            String sql = "Select * From user";
+            PreparedStatement prepare = DbHelper.getConnection().prepareStatement(sql);
             ResultSet rs = prepare.executeQuery();
             while (rs.next()) {
                 User user = new User();
@@ -36,10 +36,8 @@ public class UserCatalog {
             return list;
         } catch (SQLException ex) {
             Logger.getLogger(UserCatalog.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DbHelper.close();
         }
-        return null;
+        return list;
     }
 
     public Boolean login(String username, String password) {
@@ -48,14 +46,44 @@ public class UserCatalog {
             PreparedStatement pspm = DbHelper.getConnection().prepareStatement(sql);
             pspm.setString(1, username);
             pspm.setString(2, password);
-            ResultSet rs= pspm.executeQuery();
-            if(rs.next()){
+            ResultSet rs = pspm.executeQuery();
+            if (rs.next()) {
                 return true;
             }
             return false;
         } catch (SQLException ex) {
             Logger.getLogger(UserCatalog.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
+    }
+
+    public Boolean register(String username, String password, String email) {
+        try {
+            String checkSql = "Select * From user Where username = ? Or email = ?";
+            PreparedStatement Checkpspm =DbHelper.getConnection().prepareStatement(checkSql);
+            Checkpspm.setString(1, username);
+            Checkpspm.setString(2, email);
+             ResultSet rs =  Checkpspm.executeQuery();
+            if (rs.next()) {
+                return false;
+            }
+            Date date = new Date();
+            User user = new User(email, username, password, date);
+            String sql = "Insert into user(username, pass_word, email, date_signup) Values(?,?,?,?)";
+            PreparedStatement pspm = DbHelper.getConnection().prepareStatement(sql);
+            pspm.setString(1, user.getUsername());
+            pspm.setString(2, user.getPassWord());
+            pspm.setString(3, user.getEmail());
+            java.sql.Date sqlDate = new java.sql.Date(user.getDateSignup().getTime());
+            pspm.setDate(4, (java.sql.Date) sqlDate);
+            int effectRow = pspm.executeUpdate();
+            if(effectRow >0){
+                return true;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserCatalog.class.getName()).log(Level.SEVERE, null, ex);
+        } 
         return false;
     }
 }
