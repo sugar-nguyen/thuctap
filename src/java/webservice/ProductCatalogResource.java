@@ -14,7 +14,6 @@ import model.UserCatalog;
 public class ProductCatalogResource {
 
     private static List<Product> productCatalog;
-
     public ProductCatalogResource() {
         initializeProductCatalog();
     }
