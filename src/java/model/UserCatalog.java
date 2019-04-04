@@ -40,7 +40,7 @@ public class UserCatalog {
         return list;
     }
 
-    public Boolean login(String username, String password) {
+    public BooleanResult login(String username, String password) {
         try {
             String sql = "Select * From user Where username = ? and pass_word = ?";
             PreparedStatement pspm = DbHelper.getConnection().prepareStatement(sql);
@@ -48,16 +48,16 @@ public class UserCatalog {
             pspm.setString(2, password);
             ResultSet rs = pspm.executeQuery();
             if (rs.next()) {
-                return true;
+                return new BooleanResult(true);
             }
-            return false;
+            return new BooleanResult(false);
         } catch (SQLException ex) {
             Logger.getLogger(UserCatalog.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return new BooleanResult(false);
     }
 
-    public Boolean register(String username, String password, String email) {
+    public BooleanResult register(String username, String password, String email) {
         try {
             String checkSql = "Select * From user Where username = ? Or email = ?";
             PreparedStatement Checkpspm =DbHelper.getConnection().prepareStatement(checkSql);
@@ -65,7 +65,7 @@ public class UserCatalog {
             Checkpspm.setString(2, email);
              ResultSet rs =  Checkpspm.executeQuery();
             if (rs.next()) {
-                return false;
+                return new BooleanResult(false);
             }
             Date date = new Date();
             User user = new User(email, username, password, date);
@@ -78,12 +78,12 @@ public class UserCatalog {
             pspm.setDate(4, (java.sql.Date) sqlDate);
             int effectRow = pspm.executeUpdate();
             if(effectRow >0){
-                return true;
+                return new BooleanResult(true);
             }
-            return false;
+            return new BooleanResult(false);
         } catch (SQLException ex) {
             Logger.getLogger(UserCatalog.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        return false;
+        return new BooleanResult(false);
     }
 }

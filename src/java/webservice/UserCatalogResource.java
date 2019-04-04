@@ -5,6 +5,7 @@
  */
 package webservice;
 
+import entities.BooleanResult;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +26,24 @@ public class UserCatalogResource {
 
     @GET
     @Path("userlogin")
-    //  @Produces(MediaType.APPLICATION_JSON)
-    public Boolean login(@QueryParam("username") String username, @QueryParam("password") String password) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public BooleanResult login(@QueryParam("username") String username, @QueryParam("password") String password) {
 
         if (username != null && password != null) {
             UserCatalog ctl = new UserCatalog();
             return ctl.login(username, password);
         }
-        return false;
+        return new BooleanResult(false);
     }
     
     @GET
     @Path("userregister")
-    public Boolean register(@QueryParam("username") String username, @QueryParam("password") String password, @QueryParam("email") String email){
+    @Produces(MediaType.APPLICATION_JSON)
+    public BooleanResult register(@QueryParam("username") String username, @QueryParam("password") String password, @QueryParam("email") String email){
         if(username != null && password != null && email != null){
             UserCatalog ctl = new UserCatalog();
             return  ctl.register(username, password, email);
         }
-        return false;
+        return new BooleanResult(false);
     }
 }
